@@ -1,0 +1,45 @@
+#!/usr/bin/php
+<?php
+
+function debug($message) {
+	fwrite(STDERR, $message."\n");
+}
+
+function debug_bytes($data, $start = 0, $max = null) {
+	$string = '';
+	if(!isset($max)) {
+		if(is_array($data))
+			$max = count($data);
+		else
+			$max = strlen($data);
+	}
+
+	for($i = $start; $i < $max; ++$i)
+		$string .= sprintf('0x%x ', $data[$i+1]);
+
+	return $string;
+}
+
+include 'OLE/OLEReader.class.php';
+include 'OLE/OLEStream.class.php';
+include 'Excel/ExcelSymbols.class.php';
+include 'Excel/ExcelWorkbook.class.php';
+include 'Excel/ExcelWorksheet.class.php';
+
+if($argc > 1) {
+	$reader = new OLEReader($argv[1]);
+	$streams = $reader->getStreams();
+	foreach($streams as $stream) {
+		if($stream->getName() == 'Workbook') {
+			debug('Found workbook');
+			$workbook = new ExcelWorkbook($stream);
+
+			foreach($workbook->getWorksheets() as $sheet) {
+				/* do something with every sheet */
+			}
+
+		}
+	}
+} else {
+	debug('Usage: parse [file]');
+}
