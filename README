@@ -1,0 +1,7 @@
+This is a very simple implementation of the OLE and XLS
+specifications. It only provides read access for Excel
+BIFF8 streams (other versions might work, although
+BIFF4 and earlier probably will not work anyway).
+
+The library also contains an OLE reader to read the
+actual OLE containers produced by Excel.
